@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+NOSSOS PARCEIROS
+{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOSSOS PARCEIROS</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Referência ao seu CSS -->
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>NOSSOS PARCEIROS</h1>
+        <div class="content-wrapper">
+            <div class="text-section">
+                <p>A AÇOFER entende que o sucesso de qualquer empresa não se faz sozinho e que o trabalho em parceria é fundamental para alavancar resultados positivos. Conheça abaixo nossos parceiros:</p>
+            </div>
+        </div>
+
+        <h2>Imagens do Nossos Parceiros</h2>
+        <div class="row">
+            <!-- Exibindo imagens -->
+            {% for image in image_files %}
+                <div class="col-md-3">
+                    <a href="{{ image_url }}/{{ image }}" data-lightbox="image-set" data-title="Descrição da imagem">
+                        <img src="{{ image_url }}/{{ image }}" alt="{{ image }}" class="img-fluid zoom">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

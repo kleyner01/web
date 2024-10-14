@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Quem Somos
+{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quem Somos</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Referência ao seu CSS -->
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Quem Somos</h1>
+        <div class="content-wrapper">
+            <div class="text-section">
+                <p>Bem-vindo à nossa página "Quem Somos". Aqui você pode conhecer a nossa história.</p>
+                
+                <h2>Nossa História</h2>
+                <p>A história da AÇOFER começou com uma pequena instalação na cidade de Várzea Grande (MT), com comércio de ferros e chapas de aço para serralheria.</p>
+                <p>Após perceber o grande potencial deste mercado, inicia-se então a industrialização de perfis, tubos de aço com costura, telhas em aço galvanizado, esquadrias metálicas (portas e janelas em aço), telas e a comercialização de um variado mix de acessórios para serralheria.</p>
+                <p>Em 14/06/89, inaugurou-se o Parque Industrial, sito a ROD BR 364, Km 13 no Distrito Industrial - Cuiabá - MT, onde se processa todos os produtos e em seguida são remetidos para todas as filiais do Mato Grosso, atendendo todas as regiões e suas principais cidades do Estado, tais como: Cuiabá - Várzea Grande - Tangará da Serra - Cáceres - Lucas do Rio Verde, Sinop, Alta Floresta, Rondonópolis, Primavera do Leste, Barra do Garças e Canarana.</p>
+                <p>Esta é a Açofer, uma empresa que procura estar próxima de seus clientes, levando a sua estrutura de produtos e serviços aos lares e empresas, sempre com a filosofia de oferecer aos seus clientes, fornecedores e a sociedade, segurança, proteção, conforto e auto realização.</p>
+    
+                <h2>Nossa Missão</h2>
+                <p>Oferecer comodidade e segurança aos nossos clientes, por meio da excelência e qualidade nos produtos, serviços e no atendimento.</p>
+    
+                <h2>Visão</h2>
+                <p>Consolidar a empresa como parceira no fornecimento de produtos e serviços no Estado de MT.</p>
+    
+                <h2>Nossos Valores</h2>
+                <p>Cremos em Deus, acreditamos no Brasil, valorizamos as pessoas, trabalhamos com ética, lealdade, respeito, cooperação, segurança e responsabilidade Socioambiental.</p>
+            </div>
+    
+            <div class="video-section">
+                <video id="video-player" controls class="img-fluid" style="width: 100%; height: auto; margin-bottom: 20px;">
+                    <source id="video-source" src="{{ video_url }}/{{ video_files.0 }}" type="video/mp4">
+                    Seu navegador não suporta a tag de vídeo.
+                </video>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const videoPlayer = document.getElementById('video-player');
+            const videoSource = document.getElementById('video-source');
+            const videoFiles = {{ video_files|safe }};  // Lista de vídeos vinda do backend
+            let currentVideoIndex = 0;
+
+            videoPlayer.onended = function () {
+                // Verifica se há mais vídeos na lista
+                currentVideoIndex++;
+                if (currentVideoIndex < videoFiles.length) {
+                    videoSource.src = "{{ video_url }}/" + videoFiles[currentVideoIndex];
+                    videoPlayer.load();  // Carrega o próximo vídeo
+                    videoPlayer.play();  // Toca o vídeo automaticamente
+                } else {
+                    console.log('Todos os vídeos foram reproduzidos.');
+                }
+            };
+        });
+    </script>
+</body>
+        <h2>Imagens da Nossa História</h2>
+        <div class="row">
+            <!-- Exibindo imagens -->
+            {% for image in image_files %}
+                <div class="col-md-3">
+                    <a href="{{ image_url }}/{{ image }}" data-lightbox="image-set" data-title="Descrição da imagem">
+                        <img src="{{ image_url }}/{{ image }}" alt="{{ image }}" class="img-fluid zoom">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+</html>
+{% endblock %}

@@ -1,0 +1,106 @@
+/* styles.css */
+
+.header-section {
+    background-image: url("{% static 'path/background/1_81_BNR.jpg' %}");
+    background-size: cover; /* Faz a imagem cobrir toda a navbar */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Impede que a imagem se repita */
+    height: 70px; /* Ajuste a altura da navbar conforme necessário */
+    color: rgb(255, 255, 255); /* Define a cor do texto para ser branca */
+}
+
+/* Estilo opcional para os links da navbar */
+.header-section .nav-link {
+    color: rgb(66, 66, 66); /* Cor do texto dos links */
+}
+
+/* Estilo para cada coluna */
+.col-md-4 {
+    padding: 15px; /* Espaçamento interno */
+}
+
+/* Estilo para as imagens */
+.zoom {
+    border: 2px solid #ccc; /* Borda cinza claro */
+    border-radius: 5px; /* Cantos arredondados */
+    transition: transform 0.2s; /* Transição suave para o zoom */
+    margin-top: 10px; /* Espaço acima da imagem */
+    margin-bottom: 10px; /* Espaço abaixo da imagem */
+}
+
+/* Efeito de zoom ao passar o mouse */
+.zoom:hover {
+    transform: scale(1.1); /* Aumenta a imagem ao passar o mouse */
+}
+
+.content-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Espaçamento entre texto e vídeo */
+}
+
+.text-section {
+    flex: 1; /* Faz com que o texto ocupe o espaço disponível */
+    max-width: 60%; /* Define a largura máxima do texto (60% da largura do container) */
+}
+
+.video-section {
+    flex: 1; /* Faz com que o vídeo ocupe o espaço restante */
+    max-width: 35%; /* Define a largura máxima do vídeo (35% da largura do container) */
+}
+
+@media (max-width: 768px) {
+    /* Para telas menores, organiza o layout verticalmente */
+    .content-wrapper {
+        flex-direction: column;
+    }
+    .text-section, .video-section {
+        max-width: 100%; /* O texto e o vídeo ocupam 100% da largura em telas pequenas */
+    }
+}
+
+/* Animação da borda brilhante */
+@keyframes glowing-border {
+    0% {
+        box-shadow: 0 0 5px #1900ff, 0 0 10px #00c6ff, 0 0 15px #00c6ff, 0 0 20px #00c6ff;
+    }
+    50% {
+        box-shadow: 0 0 15px #1900ff, 0 0 20px #00c6ff, 0 0 30px #00c6ff, 0 0 40px #00c6ff;
+    }
+    100% {
+        box-shadow: 0 0 5px #1900ff, 0 0 10px #00c6ff, 0 0 15px #00c6ff, 0 0 20px #00c6ff;
+    }
+}
+
+/* Aplicando a animação ao vídeo */
+.video-section video {
+    border-radius: 10px; /* Opcional: arredonda os cantos do vídeo */
+    border: 3px solid transparent;
+    padding: 5px;
+    animation: glowing-border 2s infinite; /* Animação que faz a borda brilhar continuamente */
+    transition: transform 0.3s ease-in-out;
+}
+
+.video-section video:hover {
+    transform: scale(1.05); /* Zoom ao passar o mouse para dar um efeito interativo */
+}
+
+.d-flex {
+    display: flex;
+    align-items: center; /* Alinha verticalmente no centro */
+}
+
+.me-2 {
+    margin-right: 0.5rem; /* Margem à direita */
+}
+
+.inline-radio,
+.inline-checkbox {
+    margin-right: 1rem; /* Margem à direita para os rótulos */
+}
+
+.custom-input {
+    width: calc(100% - 1rem); /* Ajusta a largura para 100% menos um pouco para as margens */
+    padding: 0.5rem; /* Aumenta o preenchimento interno */
+    margin: 0.5rem 0; /* Margem superior e inferior */
+}

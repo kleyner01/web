@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+<div class="text-center mb-4">
+    <img src="{% static 'images/7_7_BNR.jpg' %}" alt="Logo"  class="img-fluid" alt="Banner" style="max-width: 100%;">
+</div>
+
+<div class="container mt-4">
+    <h3 class="display-6">Detalhes da Produto</h3>
+
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">{{ object.title }}</h3>
+            <p class="card-text">Categoria: {{ object.category }}</p>
+            <p class="card-text">Marca: {{ object.brand }}</p>
+            <p class="card-text">{{ object.description }}</p>
+            <p class="card-text">Número de Série: <strong>{{ object.serie_number }}</strong></p>
+            <p class="card-text">Preço de Custo: <strong>R$ {{ object.cost_price }}</strong></p>
+            <p class="card-text">Preço de Venda: <strong>R$ {{ object.selling_price }}</strong></p>
+            <p class="card-text">Quantidade em Estoque: <strong>{{ object.quantity }}</strong></p>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <a href="{% url 'product_list' %}" class="btn btn-secondary mt-3">Voltar para a Lista de Produtos</a>
+    </div>    
+</div>
+<style>
+  .product-card {
+    background-color: #e3e1e1;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center;
+    transition: all 0.3s ease;
+    max-width: 600px;
+    margin: 20px auto 0;
+    margin-bottom: 20px;
+  }
+
+  .product-card:hover {
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+  }
+
+  .product-card h2 {
+    font-size: 1.5rem;
+    margin: 10px;
+  }
+
+  .product-card p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .buttons-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .btn {
+    display: inline-block;
+    background-color: #0096c7;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+    margin: 0 10px;
+  }
+
+  .btn:hover {
+    background-color: #108eb8;
+  }
+
+  .btn-danger {
+    background-color: #d9534f;
+    text-decoration: none !important;
+  }
+
+  .btn-danger:hover {
+    background-color: #d2221c;
+  }
+
+  .error-message {
+    color: #d9534f;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
+  a {
+    text-decoration: none !important;
+  }
+
+  /* Modal Styles */
+  .modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.8); 
+  }
+
+  .modal-content {
+    margin: 15% auto; 
+    display: block;
+    width: 80%; 
+    max-width: 700px; 
+    overflow: hidden;
+  }
+
+  .modal-content img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.25s ease, transform-origin 0.25s ease; /* Smooth zoom and transform-origin */
+  }
+
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+</style>
+
+<!-- Product Card -->
+<div class="product-card">
+  {% if object.photo %}
+    <img id="productImage" src="{{ object.photo.url }}" alt="{{ object.model }} - {{ object.brand }}">
+  {% else %}
+    <p class="no-photo">Foto não disponível</p>
+  {% endif %}
+</div>
+
+<!-- Modal -->
+<div id="imageModal" class="modal">
+<span class="close">&times;</span>
+<div class="modal-content">
+  <img id="modalImage" src="{{ object.photo.url }}" alt="{{ object.model }} - {{ object.brand }}">
+</div>
+</div>
+
+<script>
+  // Get the modal and image elements
+  var modal = document.getElementById("imageModal");
+  var img = document.getElementById("productImage");
+  var modalImg = document.getElementById("modalImage");
+  var zoomScale = 1;
+
+  // Open the modal and reset the zoom when clicking on the image
+  img.onclick = function() {
+    modal.style.display = "block";
+    modalImg.src = this.src;
+    zoomScale = 1; // Reset zoom when opening the modal
+    modalImg.style.transform = `scale(${zoomScale})`;
+  }
+
+  // Close the modal
+  var span = document.getElementsByClassName("close")[0];
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // Zoom functionality with mouse wheel and keeping the focus at the mouse position
+  modalImg.addEventListener("wheel", function(event) {
+    event.preventDefault();
+    
+    // Get the bounding rectangle and mouse position within the image
+    var rect = modalImg.getBoundingClientRect();
+    var mouseX = event.clientX - rect.left;
+    var mouseY = event.clientY - rect.top;
+    
+    // Determine zoom direction
+    if (event.deltaY < 0) {
+      zoomScale += 0.1; // Zoom in
+    } else {
+      zoomScale = Math.max(1, zoomScale - 0.1); // Zoom out, limit scale to minimum 1
+    }
+    
+    // Calculate the transform origin based on the mouse position
+    var originX = (mouseX / modalImg.width) * 100;
+    var originY = (mouseY / modalImg.height) * 100;
+    modalImg.style.transformOrigin = `${originX}% ${originY}%`;
+    
+    // Apply zoom with calculated scale
+    modalImg.style.transform = `scale(${zoomScale})`;
+
+    // Keep the image centered within the modal when zooming
+    if (zoomScale > 1) {
+      modalImg.style.maxWidth = "none"; // Allow the image to grow beyond its container
+    } else {
+      modalImg.style.maxWidth = "100%"; // Reset to original size when zoomed out completely
+    }
+  });
+</script>
+
+{% endblock %}

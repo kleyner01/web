@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+<div class="text-center mb-4">
+    <img src="{% static 'images/7_7_BNR.jpg' %}" alt="Logo"  class="img-fluid" alt="Banner" style="max-width: 100%;">
+</div>
+
+    <div class="container mt-4">
+        <h3 class="display-6">Editar Produto</h3>
+
+        <div class="card">
+            <div class="card-body">
+
+                <!-- Verifica se o produto tem uma imagem associada -->
+                {% if product.photo %}
+                    <div class="text-center mb-4">
+                        <img src="{{ product.photo.url }}" alt="{{ product.title }}" style="width: 100%; max-width: 700px; height: auto; aspect-ratio: 16/9; object-fit: contain; border-radius: 8px;">
+                        <p>Imagem Atual do Produto</p>
+                    </div>
+                {% endif %}
+
+                <!-- Formulário de edição do produto -->
+                <form method="post" enctype="multipart/form-data" class="form">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Salvar Produto</button>
+                </form>
+            </div>
+        </div>
+
+        <a href="{% url 'product_list' %}" class="btn btn-secondary mt-3">Cancelar e Voltar para a Lista de Produtos</a>
+    </div>
+
+{% endblock %}

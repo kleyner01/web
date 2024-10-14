@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="text-center mb-4">
+    <img src="{% static 'images/7_7_BNR.jpg' %}" alt="Logo"  class="img-fluid" alt="Banner" style="max-width: 100%;">
+</div>
+
+<div class="container mt-4">
+    <h3 class="display-6">Detalhes da Entrada</h3>
+
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">{{ object.product }}</h3>
+            <p class="card-text">Fornecedor: <strong>{{ object.supplier }}</strong></p>
+            <p class="card-text">Quantidade: <strong>{{ object.quantity }}</strong></p>
+            <p class="card-text">{{ object.description }}</p>
+
+            <!-- Exibindo a imagem do produto -->
+            <div class="mt-3">
+                <label for="productImage">Imagem do Produto:</label><br>
+                <img id="productImage" src="{{ object.product.photo.url }}" alt="Imagem do Produto" style="max-width: 300px; max-height: 300px;">
+            </div>
+        </div>
+    </div>
+    <a href="{% url 'inflow_list' %}" class="btn btn-secondary mt-3">Voltar para a Lista de Entrada</a>
+</div>
+
+{% endblock %}

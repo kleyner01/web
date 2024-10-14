@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+<div class="text-center mb-4">
+    <img src="{% static 'images/7_7_BNR.jpg' %}" alt="Logo"  class="img-fluid" alt="Banner" style="max-width: 100%;">
+</div>
+
+<div class="container mt-4">
+    <h3 class="display-6">Cadastrar Produto</h3>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" class="form">
+                {% csrf_token %}
+                
+                <!-- Renderiza os campos do formulário sem a foto -->
+                {{ form.non_field_errors }}
+                <div class="form-group">
+                    {{ form.title.label_tag }} {{ form.title }}
+                </div>
+                <div class="form-group">
+                    {{ form.category.label_tag }} {{ form.category }}
+                </div>
+                <div class="form-group">
+                    {{ form.brand.label_tag }} {{ form.brand }}
+                </div>
+                <div class="form-group">
+                    {{ form.description.label_tag }} {{ form.description }}
+                </div>
+                <div class="form-group">
+                    {{ form.serie_number.label_tag }} {{ form.serie_number }}
+                </div>
+                <div class="form-group">
+                    {{ form.cost_price.label_tag }} {{ form.cost_price }}
+                </div>
+                <div class="form-group">
+                    {{ form.selling_price.label_tag }} {{ form.selling_price }}
+                </div>
+                <div class="container mt-1"></div>
+                <!-- Renderiza manualmente o campo de foto para adicionar a pré-visualização -->
+                <div class="form-group">
+                    <label for="id_photo">Foto do Produto:</label>
+                    <img id="imagePreview" src="#" alt="Prévia da imagem" style="max-width: 500px; max-height: 500px; display: none;">
+                    <div class="container mt-1"></div>
+                    <input type="file" name="photo" id="id_photo">
+                    <br>
+                </div>
+                <div class="container mt-3"></div>
+                <button type="submit" class="btn btn-primary">Salvar Produto</button>
+            </form>
+        </div>
+    </div>
+
+    <a href="{% url 'product_list' %}" class="btn btn-secondary mt-3">Cancelar e Voltar para a Lista de Produtos</a>
+</div>
+
+<!-- Script para exibir a prévia da imagem -->
+<script>
+    document.getElementById('id_photo').addEventListener('change', function(event) {
+        var imagePreview = document.getElementById('imagePreview');
+        var file = event.target.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = 'block'; // Exibe a imagem
+        };
+
+        if (file) {
+            reader.readAsDataURL(file); // Converte o arquivo para DataURL
+        } else {
+            imagePreview.style.display = 'none'; // Esconde a prévia se não houver imagem
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,372 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+
+{% block title %}
+Trabalhe Conosco
+{% endblock %}
+
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script>
+    $(document).ready(function(){
+        // Máscara para CPF
+        $('#id_cpf').mask('000.000.000-00');
+        
+        // Máscara para Celular (com DDD)
+        $('#id_celular').mask('(00) 00000-0000');
+        
+        // Máscara para Telefone fixo (com DDD)
+        $('#id_telefone').mask('(00) 0000-0000');
+        
+        // Máscara para Prefixo (se necessário)
+        $('#id_prefixo').mask('00');
+
+        $('#id_cep').mask('00000-000');
+
+        $('#id_rg').mask('000000');
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        // Evento quando o campo de CEP perde o foco (quando o usuário sai do campo)
+        $('#id_cep').blur(function() {
+            var cep = $(this).val().replace(/\D/g, '');
+
+            // Verifica se o CEP tem exatamente 8 dígitos
+            if (cep.length === 8) {
+                // Consulta a API ViaCEP
+                $.getJSON('https://viacep.com.br/ws/' + cep + '/json/', function(dados) {
+                    if (!('erro' in dados)) {
+                        // Preenche os campos de endereço automaticamente
+                        $('#id_endereco').val(dados.logradouro);
+                        $('#id_bairro').val(dados.bairro);
+                        $('#id_cidade').val(dados.localidade);
+                        $('#id_estado').val(dados.uf);
+                    } else {
+                        alert('CEP não encontrado.');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<h1>Trabalhe Conosco</h1>
+<h5>Dados Pessoais</h5>
+<html lang="pt-BR">
+    <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3 d-flex justify-content-between">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.nome.label_tag }}
+                {{ form.nome|add_class:"form-control" }}
+            </div>
+
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.sobrenome.label_tag }}
+                {{ form.sobrenome|add_class:"form-control" }}
+            </div>
+
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.foto_perfil.label_tag }}
+                {{ form.foto_perfil|add_class:"form-control" }}
+            </div>
+            
+        </div>
+
+        <div class="mb-3 d-flex justify-content-between">
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.email.label_tag }}
+                {{ form.email|add_class:"form-control" }}
+            </div>
+
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.curriculo.label_tag }}
+                {{ form.curriculo|add_class:"form-control" }}
+            </div>
+        </div>
+
+        <div class="mb-3 d-flex justify-content-between">
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.prefixo.label_tag }}
+                {{ form.prefixo }}
+            </div>
+
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.telefone.label_tag }}
+                {{ form.telefone }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.celular.label_tag }}
+                {{ form.celular }}
+            </div>
+        </div>
+
+        <div class="mb-3 d-flex justify-content-between">
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.endereco.label_tag }}
+                {{ form.endereco|add_class:"form-control" }}
+            </div>
+    
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.numero.label_tag }}
+                {{ form.numero|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.bairro.label_tag }}
+                {{ form.bairro|add_class:"form-control" }}
+            </div>
+        </div>
+        
+        <div class="mb-3 d-flex justify-content-between">
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.cep.label_tag }}
+                <input type="text" name="{{ form.cep.name }}" id="id_cep" class="form-control" value="{{ form.cep.value }}">
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.cidade.label_tag }}
+                {{ form.cidade|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.estado.label_tag }}
+                {{ form.estado|add_class:"form-control" }}
+            </div>
+        </div>
+    
+        <div class="mb-3 d-flex justify-content-between">
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.data_nasc.label_tag }}
+                {{ form.data_nasc|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.estado_civil.label_tag }}
+                {{ form.estado_civil|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.rg.label_tag }}
+                {{ form.rg|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.cpf.label_tag }}
+                {{ form.cpf|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.sexo.label_tag }}
+                {{ form.sexo|add_class:"form-control" }}
+            </div>
+        </div>
+
+        <div class="mb-3 d-flex justify-content-between">
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.nome_pai.label_tag }}
+                {{ form.nome_pai|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.nome_mae.label_tag }}
+                {{ form.nome_mae|add_class:"form-control" }}
+            </div>
+        </div>
+        
+        <div class="mb-3 d-flex justify-content-between">
+            <div class="flex-grow-1 mb-3 me-2">
+                <label class="me-2">{{ form.possui_habilitacao.label }}</label>
+                <div class="flex-grow-1 mb-3 me-2">
+                    {% for choice in form.possui_habilitacao %}
+                        <label class="inline-radio me-2">
+                            {{ choice.tag }} {{ choice.choice_label }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                <label class="me-2">{{ form.tipo_habilitacao.label }}</label>
+                <div class="flex-grow-1 mb-3 me-2">
+                    {% for choice in form.tipo_habilitacao %}
+                        <label class="inline-checkbox me-2">
+                            {{ choice.tag }} {{ choice.choice_label }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                <label class="me-2">{{ form.possui_carteira_profissional.label }}</label>
+                <div class="flex-grow-1 mb-3 me-2">
+                    {% for choice in form.possui_carteira_profissional %}
+                        <label class="inline-radio me-2">
+                            {{ choice.tag }} {{ choice.choice_label }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                <label class="me-2">{{ form.serie_carteira_profissional.label }}</label>
+                {{ form.serie_carteira_profissional }}
+            </div>
+        
+
+            <div class="flex-grow-1 mb-3 me-2">
+                <label>{{ form.carteira_profissional.label }}</label>
+                <div>
+                    {% for choice in form.carteira_profissional %}
+                        <label class="inline-radio">
+                            {{ choice.tag }} {{ choice.choice_label }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3 d-flex justify-content-between">
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.formacao.label_tag }}
+                {{ form.formacao|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.curso.label_tag }}
+                {{ form.curso|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.ano_conclusao.label_tag }}
+                {{ form.ano_conclusao|add_class:"form-control" }}
+            </div>
+        </div>
+
+        <div class="mb-3 d-flex justify-content-between">
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.empresa_atual.label_tag }}
+                {{ form.empresa_atual|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.segmento_atual.label_tag }}
+                {{ form.segmento_atual|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.cargo_atual.label_tag }}
+                {{ form.cargo_atual|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.data_inicio_atual.label_tag }}
+                {{ form.data_inicio_atual|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.data_saida_atual.label_tag }}
+                {{ form.data_saida_atual|add_class:"form-control" }}
+            </div>
+        </div>
+
+        <div class="flex-grow-1 mb-3 me-2">
+            {{ form.atribuicoes_atual.label_tag }}
+            {{ form.atribuicoes_atual|add_class:"form-control" }}
+        </div>
+    
+        <div class="mb-3 d-flex justify-content-between">
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.empresa_anterior_1.label_tag }}
+                {{ form.empresa_anterior_1|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.segmento_anterior_1.label_tag }}
+                {{ form.segmento_anterior_1|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.cargo_anterior_1.label_tag }}
+                {{ form.cargo_anterior_1|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.data_inicio_anterior_1.label_tag }}
+                {{ form.data_inicio_anterior_1|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.data_saida_anterior_1.label_tag }}
+                {{ form.data_saida_anterior_1|add_class:"form-control" }}
+            </div>
+        </div>
+    
+        <div class="flex-grow-1 mb-3 me-2">
+            {{ form.atribuicoes_anterior_1.label_tag }}
+            {{ form.atribuicoes_anterior_1|add_class:"form-control" }}
+        </div>
+    
+        <div class="mb-3 d-flex justify-content-between">
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.empresa_anterior_2.label_tag }}
+                {{ form.empresa_anterior_2|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.segmento_anterior_2.label_tag }}
+                {{ form.segmento_anterior_2|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.cargo_anterior_2.label_tag }}
+                {{ form.cargo_anterior_2|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.data_inicio_anterior_2.label_tag }}
+                {{ form.data_inicio_anterior_2|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.data_saida_anterior_2.label_tag }}
+                {{ form.data_saida_anterior_2|add_class:"form-control" }}
+            </div>
+        </div>
+
+        <div class="flex-grow-1 mb-3 me-2">
+            {{ form.atribuicoes_anterior_2.label_tag }}
+            {{ form.atribuicoes_anterior_2|add_class:"form-control" }}
+        </div>
+    
+        <div class="mb-3 d-flex justify-content-between">
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.cargo_pretendido.label_tag }}
+                {{ form.cargo_pretendido|add_class:"form-control" }}
+            </div>
+        
+            <div class="flex-grow-1 mb-3 me-2">
+                {{ form.faixa_salarial_desejada.label_tag }}
+                {{ form.faixa_salarial_desejada|add_class:"form-control" }}
+            </div>
+        </div>
+
+        <div class="flex-grow-1 mb-3 me-2">
+            {{ form.mensagem.label_tag }}
+            {{ form.mensagem|add_class:"form-control" }}
+        </div>
+    
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+
+    
+</html>
+{% endblock %}
